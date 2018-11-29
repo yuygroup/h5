@@ -1,16 +1,161 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8">
-		<title>yuygroup@163.com</title>
-	</head>
-	<body>
-		<style type="text/css">
-			h1{
-				text-align: center;
-				color: blueviolet;
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <title>music</title>
+  <style>
+	*{margin:0;padding:0}
+	#Music{width:900px;height:600px;background:#ff00cc;margin:100px auto;}
+	#Music .MusicL{width:650px;height:526px;background:url("images/music.gif") center;float:left}
+    #Music .MusicR{width:250px;height:526px;background:rgba(0,0,0,0.7);float:right}
+    #Music .MusicR ul{list-style:none;width:140px;height:180px;margin:20px auto}
+	#Music .MusicR ul li:nth-child(2){text-align:center;line-height:40px;border-bottom:2px solid #fff;color:#fff}
+	#Music .MusicR ul li img{border-radius:50%;box-shadow:0px 0px 5px #fff}
+	#Music .MusicR .text{width:100%;height:300px;text-align:center;color:#ffff00;line-height:30px;font-weight:700;font-family:"楷体";overflow-y:auto}
+	
+	
+	#Music .fotter{width:100%;height:74px;background:url("images/fbg.png");float:left;text-align:center;}
+	.color{color:#33ff00;font-size:28px}
+	
+	
+	/*定义关键帧  让图片转起来*/
+	.rotateZ{animation:run 10s linear infinite;}
+	@keyframes run{
+		from{transform:rotate(0deg);}
+		to{transform:rotate(360deg);}
+	}
+
+	/*
+		滚动条修饰
+	*/
+	.text::-webkit-scrollbar{width:5px;background:#ccc}
+	.text::-webkit-scrollbar-button{background-color:#e5e5e5}
+	.text::-webkit-scrollbar-thumb{background:#999}
+  
+  </style>
+ </head>
+ <body>
+	<div id="Music">
+		<div class="MusicL">
+			<textarea id="lrc" style="display:none">
+										
+
+
+[00:00.62]我要 你在我身旁
+[00:08.24]我要 你为我梳妆
+[00:14.87]这夜的风儿吹
+[00:18.33]吹得心痒痒 我的情郎
+[00:22.11]我在他乡 望着月亮
+[00:29.45]都怪这月色 撩人的疯狂
+[00:36.62]都怪这 guitar 弹得太凄凉
+[00:44.05]欧 我要唱着歌
+[00:47.25]默默把你想 我的情郎
+[00:51.12]你在何方 眼看天亮
+[00:58.23]
+[01:13.10]都怪这夜色 撩人的疯狂
+[01:20.33]都怪这guitar 弹得太凄凉
+[01:27.68]欧 我要唱着歌
+[01:30.95]默默把你想 我的情郎
+[01:34.79]你在何方 眼看天亮
+[01:42.65]我要 美丽的衣裳
+[01:49.95]为你 对镜贴花黄
+[01:56.70]这夜色太紧张
+[02:00.15]时间太漫长 我的情郎
+[02:03.99]我在他乡 望着月亮
+[02:11.51]
+
+
+
+			</textarea>
+		</div>
+		<div class="MusicR">
+			<ul>
+				<li><img src="images/rsx.jpg" width="" height="" alt="" class="rotateZ"/></li>
+				<li>我要你 - 任素汐</li>
+			</ul>
+			<!--歌词-->
+			<div class="text"></div>
+		</div>
+		<div class="fotter">
+			<input type="button" value="暂停/播放" id="play" style="height:74px;width:100%;" />
+		</div>
+	</div>
+
+	<audio src="yinyue/1.mp3" id="myMusic"></audio>
+	
+	<script src="js/jquery.js"></script>
+	<script src="js/tz_mini.js"></script>
+	
+	<script>
+		$(document).ready(function(){
+			$("#myMusic").get(0).play();
+		/*开启拖拽
+			$("#Music").draggable();
+			$("#Music").draggable("disable");
+			
+			$(".MusicL").hover(function(){
+				$("#Music").draggable();
+			}),function(){
+				$("#Music").draggable("disable");
 			}
-		</style>
-		<h1>this is yuygroup@163.com</h1>
-	</body>
+*/
+
+		//解析歌词
+		var lrc = $("#lrc").val();
+		//console.log(lrc);
+		//把歌词前面的时间和歌词进行分割
+		var lrcArr = lrc.split("[");
+		//console.log(lrcArr);	
+		var html = "";
+		for(var i=0;i<lrcArr.length;i++){
+			var arr = lrcArr[i].split("]");
+	//console.log(arr);   经过这次分割 成了一个个数组 0下标为时间 1下标为歌词
+	
+		//拿到时间
+		var timer = arr[0].split(".");
+		var stimer = timer[0].split(":");
+
+		//console.log(stimer);经过这次切割 0 代表分钟 1代表秒
+		//转化成秒
+		var ms = stimer[0]*60+stimer[1]*1;
+			//取歌词
+			var message = arr[1];
+			if(message){
+				html += "<p id="+ms+">"+message+"</p>"    //id是否可以换成单引号
+			}
+			$(".text").html(html);
+		}
+
+		//控制音乐播放暂停
+		var mark = 0;
+			$("#play").click(function(){
+				if(mark == 0){
+				$("#myMusic").get(0).play();
+				mark = 1;
+				}else{
+				$("#myMusic").get(0).pause();
+				mark = 0;
+				}
+
+			})
+		})
+		
+		//歌词联动
+		$("#myMusic").get(0).addEventListener("timeupdate",function(){
+			//获取播放时间
+			var timer = this.currentTime;
+			//通过时间驱动歌词
+			var s = parseInt(timer);
+			console.log(s);
+			for(var i=0;i<s;i++){
+				$("#"+i).addClass("color").siblings().removeClass("color");
+				$(".text").scrollTop(($(".color").index()-10)*300);
+			}
+		});
+	</script>
+ </body>
 </html>
